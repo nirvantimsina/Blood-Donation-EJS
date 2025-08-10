@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Members | Blood Donor Nepal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a209b08554.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/login-register.css">
+    <link rel="stylesheet" href="../css/search.css">
+    <link rel="stylesheet" href="../css/familyMember.css">
+</head>
+
+<body>
+    <%- include('navbar'); -%>
+        <% if (message) { %>
+            <div class="toast position-fixed bg-success" id="toast-message" role="alert" aria-live="assertive"
+                aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fa-solid fa-circle-check fa-sm" style="color: #f0f0f0;"></i>
+                        <%= message %>
+                    </div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"
+                        style="color: white;"></button>
+                </div>
+            </div>
+            <% } %>
+                <!-- Family Members Section -->
+                <div class="container mt-5">
+                    <div class="row">
+                        <div class="col-md-6 offset-md-3">
+                            <center>
+                                <h3>Add Family Members</h3>
+                            </center>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-text" id="userImageContainer">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input type="text" id="searchInput" class="form-control"
+                                    placeholder="Search for family members...">
+                            </div>
+                            <div id="autocompleteResults" class="autocomplete-results"></div>
+                            <div id="selectedUsers" class="mt-3"></div>
+                            <form id="userForm" method="POST" action="/user/familymembers">
+                                <input type="hidden" id="userIds" name="userIds">
+                                <center>
+                                    <button type="submit" class="btn btn-primary mt-3 d-none" id="sendRequestBtn">Send
+                                        Request</button>
+                                    <br>
+                                    <label class="form-check-label" id="label-remember-description"
+                                        style="color: #7f837e;">
+                                        <i class="fa-solid fa-circle-info fa-xs"></i>
+                                        You can only send request to 5 Family Members at once.
+                                    </label>
+                                </center>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Your Family Members Section -->
+                    <div class="container mt-5">
+                        <h3 class="text-center mb-4">Your Family Members</h3>
+                        <div class="row g-4">
+                            <% if (familyMembers.length> 0) { %>
+                                <% someMembers=true; %>
+                                    <% familyMembers.forEach(member=> { %>
+                                        <div class="col-md-4 col-lg-3">
+                                            <div class="card">
+                                                <img src="<%= member.userImage %>" class="card-img-top"
+                                                    alt="<%= member.name %>">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">
+                                                        <%= member.fullName %>
+                                                    </h5>
+                                                    <p class="card-text">
+                                                        <strong>District:</strong>
+                                                        <%= member.address.district %><br>
+                                                            <strong>City:</strong>
+                                                            <%= member.address.city %><br>
+                                                                <strong>Blood Group:</strong>
+                                                                <%= member.bloodDetails.bloodGroupType %><br>
+                                                    </p>
+                                                    <button class="btn btn-danger btn-sm remove-btn"
+                                                        data-bs-toggle="modal" data-bs-target="#confirmationModal"
+                                                        data-memberid="<%= member.id %>">Remove
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% }); %>
+                                            <% } else { %>
+                                                <div class="col-12">
+                                                    <div class="alert alert-info">No family members available.</div>
+                                                </div>
+                                                <% } %>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Confirmation Modal -->
+                    <div class="modal fade" id="confirmationModal" tabindex="-1"
+                        aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirmationModalLabel">Confirm Removal</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">Are you sure you want to remove this family member?</div>
+                                <div class="modal-footer">
+                                    <form id="removeForm" method="POST" action="/user/familymembers-remove">
+                                        <input type="hidden" id="removeMemberId" name="memberId">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-danger">Remove</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const searchInput = document.getElementById('searchInput');
+                        const autocompleteResults = document.getElementById('autocompleteResults');
+                        const selectedUsers = document.getElementById('selectedUsers');
+                        const userForm = document.getElementById('userForm');
+                        const userIdsInput = document.getElementById('userIds');
+                        const sendRequestBtn = document.getElementById('sendRequestBtn');
+                        const removeMemberIdInput = document.getElementById('removeMemberId'); // Hidden input field in the modal
+
+                        function toggleSendRequestButton() {
+                            if (selectedUsers.children.length > 0) {
+                                sendRequestBtn.classList.remove('d-none');
+                            } else {
+                                sendRequestBtn.classList.add('d-none');
+                            }
+                        }
+
+                        // Handle search input and populate autocomplete results
+                        searchInput.addEventListener('input', async function () {
+                            const query = searchInput.value.trim();
+                            if (!query) {
+                                autocompleteResults.style.display = 'none';
+                                autocompleteResults.innerHTML = '';
+                                return;
+                            }
+
+                            const response = await fetch(`/user/familymembers/search?q=${query}`);
+                            const users = await response.json();
+
+                            autocompleteResults.innerHTML = '';
+                            if (users.length > 0) {
+                                autocompleteResults.style.display = 'block';
+                                users.forEach(user => {
+                                    const div = document.createElement('div');
+                                    div.classList.add('autocomplete-item');
+                                    div.innerHTML = `<div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <div class="d-flex align-items-start">
+                                                            <img src="${user.userImage}" alt="${user.fullName}" class="user-image me-3" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+                                                        <div>
+                                                                <strong>${user.fullName}</strong><br>
+                                                                <span>${user.address.district}, ${user.address.city}</span>
+                                                            </div>
+                                                        </div>
+                                                        <button class="btn btn-sm btn-primary add-user-btn" data-username="${user.fullName}" data-userimage="${user.userImage}" data-userid="${user._id}">Add</button>
+                                                    </div>
+                                                    `;
+                                    autocompleteResults.appendChild(div);
+                                });
+                            } else {
+                                autocompleteResults.innerHTML = '<div class="autocomplete-item">No results found</div>';
+                            }
+                        });
+
+                        // Add user to selected list
+                        autocompleteResults.addEventListener('click', function (e) {
+                            if (e.target.classList.contains('add-user-btn')) {
+                                const userName = e.target.getAttribute('data-username');
+                                const userImageSrc = e.target.getAttribute('data-userimage');
+                                const userId = e.target.getAttribute('data-userid');
+
+                                const userDiv = document.createElement('div');
+                                userDiv.classList.add('selected-user');
+                                userDiv.innerHTML = `
+                        <div class="d-flex align-items-center">
+                            <img src="${userImageSrc}" alt="${userName}" class="user-image me-2">
+                            <span>${userName}</span>
+                            <i class="bi bi-x-lg remove-user-btn" style="cursor:pointer;" data-userid="${userId}"></i>
+                        </div>
+                    `;
+                                selectedUsers.appendChild(userDiv);
+
+                                const currentIds = userIdsInput.value ? userIdsInput.value.split(',') : [];
+                                if (!currentIds.includes(userId)) {
+                                    userIdsInput.value = [...currentIds, userId].join(',');
+                                }
+
+                                toggleSendRequestButton();
+                                searchInput.value = '';
+                                autocompleteResults.innerHTML = '';
+                                autocompleteResults.style.display = 'none';
+                            }
+
+                        });
+
+                        // Remove user from selected list
+                        selectedUsers.addEventListener('click', function (e) {
+                            if (e.target.classList.contains('remove-user-btn')) {
+                                const userId = e.target.getAttribute('data-userid');
+                                const userDiv = e.target.closest('.selected-user');
+                                selectedUsers.removeChild(userDiv);
+
+                                const currentIds = userIdsInput.value ? userIdsInput.value.split(',') : [];
+                                userIdsInput.value = currentIds.filter(id => id !== userId).join(',');
+                                toggleSendRequestButton();
+                            }
+                        });
+
+                        // Listen for the click on the "Remove" button to set the memberId in the confirmation modal
+                        document.addEventListener('click', function (e) {
+                            if (e.target.classList.contains('remove-btn')) {
+                                const memberIdToRemove = e.target.getAttribute('data-memberid');  // Get the memberId from the button
+                                removeMemberIdInput.value = memberIdToRemove;  // Set the memberId to the hidden input
+                            }
+                        });
+
+                        function initializeToast() {
+                            var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+                            var toastList = toastElList.map(function (toastEl) {
+                                return new bootstrap.Toast(toastEl);
+                            });
+                            toastList.forEach(toast => toast.show());
+                        }
+
+                        initializeToast();
+                    });
+                </script>
+
+</body>
+
+</html>

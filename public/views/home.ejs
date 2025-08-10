@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Blood Donor Nepal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a209b08554.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/login-register.css">
+    <style>
+        :root {
+            --primary-red: #e63946;
+            --dark-red: #c1121f;
+            --light-red: #ff758f;
+            --light-gray: #f8f9fa;
+        }
+
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 120px 0;
+            text-align: center;
+        }
+
+        .stat-card {
+            border-radius: 10px;
+            transition: transform 0.3s;
+            height: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-donate {
+            background-color: var(--primary-red);
+            color: white;
+            font-weight: bold;
+            padding: 12px 30px;
+            border-radius: 30px;
+            transition: all 0.3s;
+        }
+
+        .btn-donate:hover {
+            background-color: var(--dark-red);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-red);
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-card {
+            border-left: 4px solid var(--primary-red);
+        }
+
+        .blood-drop {
+            color: var(--primary-red);
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('navbar'); -%>
+        <% if (message || error) { %>
+            <div class="toast position-fixed <% if (message) { %> bg-success <% } else if (error) { %> bg-danger <% } %>"
+                id="toast-message" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <% if (message) { %>
+                            <i class="fa-solid fa-circle-check fa-sm" style="color: #f0f0f0;"></i>
+                            <%= message %>
+                                <% } else if (error) { %>
+                                    <i class="fa-solid fa-triangle-exclamation fa-sm" style="color: #f0f0f0;"></i>
+                                    <%= error %>
+                                        <% } %>
+                    </div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"
+                        style="color: white;"></button>
+                </div>
+            </div>
+            <% } else { } %>
+
+                <!-- Hero Section -->
+                <section class="hero-section">
+                    <div class="container">
+                        <h1 class="display-3 fw-bold mb-4">Donate Blood, Save Lives</h1>
+                        <p class="lead mb-5">Join Nepal's largest community of blood donors and help those in urgent
+                            need</p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <% if(user.approved){ %>
+                                <a href="/bloodRequest" class="btn btn-outline-light btn-lg">
+                                    <i class="fas fa-tint me-2"></i> Request Blood
+                                </a>
+                                <% } %>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Stats Section -->
+                <section class="py-5 bg-light">
+                    <div class="container">
+                        <div class="row g-4">
+                            <div class="col-md-3">
+                                <div class="stat-card bg-white p-4 text-center shadow-sm">
+                                    <h2 class="text-danger">6</h2>
+                                    <p class="mb-0">Registered Donors</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card bg-white p-4 text-center shadow-sm">
+                                    <h2 class="text-danger">0</h2>
+                                    <p class="mb-0">Lives Saved</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card bg-white p-4 text-center shadow-sm">
+                                    <h2 class="text-danger">24/7</h2>
+                                    <p class="mb-0">Emergency Support</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- How It Works Section -->
+                <section class="py-5">
+                    <div class="container">
+                        <div class="text-center mb-5">
+                            <h2 class="fw-bold">How It Works</h2>
+                            <p class="lead text-muted">Three simple steps to save a life</p>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-4 text-center">
+                                <div class="feature-icon">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <h4>1. Register</h4>
+                                <p>Create your donor profile with blood type and location</p>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="feature-icon">
+                                    <i class="fas fa-bell"></i>
+                                </div>
+                                <h4>2. Get Alerts</h4>
+                                <p>Receive notifications when someone nearby needs your blood type</p>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="feature-icon">
+                                    <i class="fas fa-hand-holding-heart"></i>
+                                </div>
+                                <h4>3. Donate</h4>
+                                <p>Visit the hospital and give the gift of life</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Blood Types Info -->
+                <section class="py-5 bg-light">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <h2 class="fw-bold mb-4">Every Blood Type Matters</h2>
+                                <p>Whether you're A, B, AB, or O, your donation is valuable. Different patients need
+                                    different blood types for transfusions.</p>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><span class="blood-drop"><i class="fas fa-tint me-2"></i></span>
+                                        O-: Universal donor (most needed)</li>
+                                    <li class="mb-2"><span class="blood-drop"><i class="fas fa-tint me-2"></i></span>
+                                        AB+: Universal plasma donor</li>
+                                    <li class="mb-2"><span class="blood-drop"><i class="fas fa-tint me-2"></i></span>
+                                        All types are constantly needed</li>
+                                </ul>
+                                <a href="/learn-more" class="btn btn-outline-danger mt-3">Learn More About Blood
+                                    Types</a>
+                            </div>
+                            <div class="col-md-6">
+                                <img src="https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                    alt="Blood donation" class="img-fluid rounded shadow">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- Call to Action -->
+                <section class="py-5 bg-danger text-white">
+                    <div class="container text-center">
+                        <h2 class="fw-bold mb-4">Ready to Make a Difference?</h2>
+                        <p class="lead mb-5">One donation can save up to three lives. Join our community today.</p>
+                    </div>
+                </section>
+
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                <script>
+                    // Toast popup
+                    function initializeToast() {
+                        document.addEventListener('DOMContentLoaded', function () {
+                            var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+                            var toastList = toastElList.map(function (toastEl) {
+                                return new bootstrap.Toast(toastEl)
+                            });
+                            toastList.forEach(toast => toast.show());
+                        });
+                    }
+                    initializeToast();
+                </script>
+</body>
+
+</html>

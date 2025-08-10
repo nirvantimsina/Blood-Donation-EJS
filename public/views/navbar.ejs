@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blood Donor Nepal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/navbar.css">
+  <link rel="stylesheet" href="../css/login-register.css">
+  <link rel="stylesheet" href="../css/personalDetails.css">
+</head>
+
+<body>
+  <!-- Header Start -->
+  <header>
+    <nav class="navbar navbar-expand-lg sticky-top navbar-light">
+      <div class="container">
+        <a class="navbar-brand" href="/home">
+          <img src="../images/blood-donor.png" alt="logo" width="28" height="28"> Blood Donor Nepal
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/bloodRequest">Blood Request</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/user/notifications">Notifications
+                <% if (unreadCount> 0) { %>
+                  <sup> <span class="notification-count" style="color: #ff0000;">
+                      <%= unreadCount %>
+                    </span></sup>
+                  <% } %>
+              </a>
+            </li>
+            <li class="nav-item dropdown" style="font-weight: bold;">
+              <div class="btn-group">
+                <button class="btn btn-transparent dropdown-toggle" type="button" data-toggle="dropdown"
+                  aria-expanded="false" style="font-weight: bold;font-size: 14px;">
+                  <img src="<%= user.userImage  %>" alt="Profile Image" class="profile-img-navbar" id="profileImage">
+                  <%= user.fullName %>
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="/user/details">Personal Details</a>
+                  <% if(user.approved===false){ %><a class="dropdown-item" href="/user/medicaldetails">Medical
+                      Details</a>
+                    <% }else{ %>
+                      <a class="dropdown-item" href="/user/familymembers">Family Members</a>
+                      <a class="dropdown-item" href="/user/familymember-request">Family Requests
+                        <% if (unreadRequestCount> 0) { %>
+                          <sup> <span class="notification-count" style="color: #ff0000;">
+                              <%= unreadRequestCount %>
+                            </span></sup>
+                          <% } %>
+                      </a>
+                      <a class="dropdown-item" href="/user/mybloodrequests">My Blood Requests</a>
+                      <%} %>
+                        <a class="dropdown-item" href="/user/logout">Logout <i class="bi bi-box-arrow-right"
+                            style="color: #ff0000"></i></a>
+                </div>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <% if(user.approved===false) {%>
+      <p style="background-color: rgba(250, 0, 0, 0.732); color: white; text-align: center;">Please add your medical
+        details to
+        perform Blood Donation or Receive Blood, <a href="/user/medicaldetails" style="color: white;">click here to add
+          your medical
+          Details</a>.</p>
+      <% } else{ %><br>
+        <%} %>
+  </header>
+  <!-- Header End -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const navbar = document.querySelector('.navbar');
+      const navBtn = document.querySelector('.navbar-toggler');
+      const navNav = document.querySelector('#navbarNav');
+      const navLinks = document.querySelectorAll('.nav-link');
+      const dropdownToggle = document.querySelector('.dropdown-toggle'); // Move this declaration here
+      const body = document.body;
+
+      navBtn.addEventListener('click', () => {
+        navNav.classList.toggle('open');
+        body.classList.toggle('nav-open');
+      });
+
+      dropdownToggle.addEventListener('click', function (event) {
+        event.stopPropagation(); // Prevent the click event from propagating to the document
+        var dropdownMenu = dropdownToggle.nextElementSibling;
+        dropdownMenu.classList.toggle('show');
+      });
+
+      document.addEventListener('click', function (event) {
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+        const dropdownToggle = document.querySelector('.dropdown-toggle');
+
+        if (!dropdownMenu.contains(event.target) && !dropdownToggle.contains(event.target)) {
+          dropdownMenu.classList.remove('show');
+        }
+      });
+    });
+
+  </script>
+</body>
+
+</html>

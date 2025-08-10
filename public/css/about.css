@@ -1,0 +1,32 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .about-section {
+    background-color: #ffffff;
+    padding: 50px 0;
+  }
+  
+  .container {
+    width: 80%;
+    margin: auto;
+  }
+  
+  .container h1 {
+    color: #051c15;
+  }
+  
+  .container p {
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  footer {
+    background-color: #051c15;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+  }
+  

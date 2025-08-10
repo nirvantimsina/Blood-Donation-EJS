@@ -1,0 +1,294 @@
+{
+    "cancer": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "hiv": {
+        "canDonate": false,
+        "canReceive": false
+    },
+    "hepatitis b": {
+        "canDonate": false,
+        "canReceive": false
+    },
+    "hepatitis c": {
+        "canDonate": false,
+        "canReceive": false
+    },
+    "tuberculosis": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "malaria": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "dengue": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "typhoid": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "cholera": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "diabetes": {
+        "canDonate": true,
+        "canReceive": true
+    },
+    "hypertension": {
+        "canDonate": true,
+        "canReceive": true
+    },
+    "asthma": {
+        "canDonate": true,
+        "canReceive": true
+    },
+    "heart disease": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "kidney disease": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "liver disease": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "epilepsy": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "leprosy": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "sickle cell disease": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "thalassemia": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "anemia": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "pregnancy": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "recent surgery": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "tattoo/piercing": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "cold/flu": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "covid-19": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "dengue fever": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "leukemia": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "lymphoma": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "malignant tumors": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "chronic obstructive pulmonary disease (copd)": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "epilepsy (uncontrolled)": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "syphilis": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "malaria (recent infection)": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "creutzfeldt-jakob disease (cjd)": {
+        "canDonate": false,
+        "canReceive": false
+    },
+    "zika virus (recent infection)": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "chagas disease": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "autoimmune diseases (severe)": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "measles": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "mumps": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "rubella": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "chickenpox": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "ebola": {
+        "canDonate": false,
+        "canReceive": false
+    },
+    "marburg virus": {
+        "canDonate": false,
+        "canReceive": false
+    },
+    "lassa fever": {
+        "canDonate": false,
+        "canReceive": false
+    },
+    "hantavirus": {
+        "canDonate": false,
+        "canReceive": false
+    },
+    "nipah virus": {
+        "canDonate": false,
+        "canReceive": false
+    },
+    "japanese encephalitis": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "yellow fever": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "plague": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "smallpox": {
+        "canDonate": false,
+        "canReceive": false
+    },
+    "polio": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "rabies": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "filariasis": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "leishmaniasis": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "brucellosis": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "q fever": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "anthrax": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "toxoplasmosis": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "whipple's disease": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "cystic fibrosis": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "scleroderma": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "sjögren's syndrome": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "sarcoidosis": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "guillain-barré syndrome": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "myasthenia gravis": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "multiple sclerosis": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "amyotrophic lateral sclerosis (als)": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "hemophilia": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "von willebrand disease": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "hemochromatosis": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "aplastic anemia": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "polycythemia vera": {
+        "canDonate": false,
+        "canReceive": true
+    },
+    "myelofibrosis": {
+        "canDonate": false,
+        "canReceive": true
+    }
+}

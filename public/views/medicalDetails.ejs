@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Details | Blood Donor Nepal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a209b08554.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../css/login-register.css">
+    <style>
+        /* Add custom styles here */
+    </style>
+</head>
+
+<body>
+    <%- include('navbar'); -%>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <form class="custom-form" id="identityForm" action="/user/medicaldetails" method="POST"
+                        enctype="multipart/form-data" novalidate>
+                        <h2 class="form-title">Medical Details</h2>
+
+                        <div class="mb-3">
+                            <label for="bloodGroup" class="form-label">Blood Group</label>
+                            <select class="form-select" id="bloodGroup" name="bloodGroupType" required>
+                                <option value="" selected disabled>Select Blood Group</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                            <div class="invalid-feedback">Blood group is required.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="diseases" class="form-label">Suffered Diseases</label>
+                            <select class="form-select" id="diseases" name="disease">
+                                <option value="None">None</option>
+                                <option value="Cancer">Cancer</option>
+                                <option value="HIV">HIV</option>
+                                <option value="Hepatitis B">Hepatitis B</option>
+                                <option value="Hepatitis C">Hepatitis C</option>
+                                <option value="Tuberculosis">Tuberculosis</option>
+                                <option value="Malaria">Malaria</option>
+                                <option value="Dengue">Dengue</option>
+                                <option value="Typhoid">Typhoid</option>
+                                <option value="Diabetes">Diabetes</option>
+                                <option value="Hypertension">Hypertension</option>
+                                <option value="Asthma">Asthma</option>
+                                <option value="Heart Disease">Heart Disease</option>
+                                <option value="Kidney Disease">Kidney Disease</option>
+                                <option value="Liver Disease">Liver Disease</option>
+                                <option value="Yellow Fever">Yellow Fever</option>
+                                <option value="Polio">Polio</option>
+                                <option value="Rabies">Rabies</option>
+                                <option value="anyOther">Others</option>
+                            </select>
+                        </div>
+                        <div class="md-3" id="specificDiseaseDiv" style="display: none;">
+                            <label for="SpecificDisease" class="form-label">Any Specific Disease</label>
+                            <input type="text" class="form-control" id="SpecificDisease" name="SpecificDisease"
+                                pattern="[A-Za-z0-9]+">
+                            <div class="invalid-feedback" id="specificDiseaseRequired">Please mention the specific
+                                disease.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="bloodGroupImage" class="form-label">Upload Blood Group Card Image</label>
+                            <input type="file" class="form-control" id="bloodGroupImage" name="bloodGroupImage"
+                                accept="image/*" required>
+                                <div class="invalid-feedback">Blood Group Card image is required.</div>
+                                <label class="form-check-label" id="label-Blood-Card-description" style="color: #7f837e;"><i
+                                        class="bi bi-info-circle-fill" ></i>
+                                    Any proof to determine Blood Group. Must contain your Full Name and blood Group.</label>
+                                <label class="form-check-label" id="label-Blood-Card-description" style="color: #7f837e;"><i
+                                        class="bi bi-info-circle-fill" ></i>
+                                    Please fill the details carefully, once approved User can't manually update the details.</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            // Form validation
+            document.addEventListener('DOMContentLoaded', function () {
+                const form = document.getElementById('identityForm');
+
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+
+                    form.classList.add('was-validated');
+                });
+
+                // Reset validation on input change
+                form.addEventListener('input', function () {
+                    if (form.checkValidity()) {
+                        form.classList.remove('was-validated');
+                    }
+                });
+                //add input for specific disease if any
+                document.getElementById('diseases').addEventListener('change', function () {
+                    var specificDiseaseDiv = document.getElementById('specificDiseaseDiv');
+                    var specificDiseaseInput = document.getElementById('SpecificDisease');
+
+                    if (this.value === 'anyOther') {
+                        specificDiseaseDiv.style.display = 'block';
+                        specificDiseaseInput.setAttribute('required', true); // set required attribute
+                    } else {
+                        specificDiseaseDiv.style.display = 'none';
+                        specificDiseaseInput.removeAttribute('required'); // remove required attribute
+                    }
+                });
+            });
+        </script>
+</body>
+
+</html>

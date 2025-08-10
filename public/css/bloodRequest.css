@@ -1,0 +1,14 @@
+/* Blur effect for the form container */
+.blur-container {
+  filter: blur(2px);
+  pointer-events: none;
+  user-select: none;
+  position: relative;
+}
+gmp-map:not(:defined) {
+  display: none;
+}
+#map {
+  height: 400px;
+  width: 100%;
+}

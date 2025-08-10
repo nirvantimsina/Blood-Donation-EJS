@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blood Request | Blood Donor Nepal</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.maptiler.com/maptiler-sdk-js/v3.0.1/maptiler-sdk.umd.min.js"></script>
+    <link href="https://cdn.maptiler.com/maptiler-sdk-js/v3.0.1/maptiler-sdk.css" rel="stylesheet" />
+    <script src="https://cdn.maptiler.com/maptiler-geocoding-control/v2.1.4/maptilersdk.umd.js"></script>
+    <link href="https://cdn.maptiler.com/maptiler-geocoding-control/v2.1.4/style.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a209b08554.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="stylesheet" href="../css/login-register.css" />
+    <link rel="stylesheet" href="../css/familyMember.css" />
+    <link rel="stylesheet" href="../css/search.css" />
+    <link rel="stylesheet" href="../css/bloodRequest.css" />
+</head>
+
+<body>
+    <%- include('navbar'); -%>
+        <% if (message || error) { %>
+            <div class="toast position-fixed <% if (message) { %> bg-success <% } else if (error) { %> bg-danger <% } %>"
+                id="toast-message" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <% if (message) { %>
+                            <i class="fa-solid fa-circle-check fa-sm" style="color: #f0f0f0"></i>
+                            <%= message %>
+                                <% } else if (error) { %>
+                                    <i class="fa-solid fa-triangle-exclamation fa-sm" style="color: #f0f0f0"></i>
+                                    <%= error %>
+                                        <% } %>
+                    </div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"
+                        style="color: white"></button>
+                </div>
+            </div>
+            <% } %>
+                <% if(user.approved){ %>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <form class="custom-form needs-validation" id="bloodRequestForm" method="POST"
+                                    action="/bloodRequest" novalidate>
+                                    <h2 class="form-title">Blood Request</h2>
+
+                                    <!-- Hidden fields for disabled inputs -->
+                                    <input type="hidden" id="hiddenFullName" name="fullName">
+                                    <input type="hidden" id="hiddenBloodGroup" name="bloodGroupType">
+
+                                    <!-- Recipient Type Selection -->
+                                    <div class="mb-3">
+                                        <label for="recipientType" class="form-label">Who is the recipient?</label>
+                                        <select class="form-select" id="recipientType" name="recipientType" required>
+                                            <option value="" selected disabled>
+                                                Select Recipient Type
+                                            </option>
+                                            <option value="myself">Myself</option>
+                                            <option value="familyMember">Family Member</option>
+                                            <option value="other">Someone else</option>
+                                        </select>
+                                        <div class="invalid-feedback">Recipient type is required.</div>
+                                    </div>
+
+                                    <!-- Recipient Details Form -->
+                                    <div id="recipientDetails" class="d-none">
+                                        <div class="mb-3">
+                                            <label for="fullName" class="form-label">Full Name</label>
+                                            <input type="text" class="form-control" id="fullName" disabled />
+                                            <div class="invalid-feedback">Full name is required.</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="address" class="form-label">Address</label>
+                                            <input type="text" class="form-control" id="address" name="address"
+                                                required />
+                                            <div class="invalid-feedback">Address is required.</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="bloodGroup" class="form-label">Blood Group</label>
+                                            <input type="text" class="form-control" id="bloodGroup" disabled />
+                                            <div class="invalid-feedback">Blood group is required.</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="contactNumber" class="form-label">Contact Number</label>
+                                            <input type="text" class="form-control" id="contactNumber"
+                                                name="contactNumber" required pattern="[0-9]{10}" />
+                                            <div class="invalid-feedback">
+                                                Valid 10-digit contact number is required.
+                                            </div>
+                                            <label class="form-check-label" id="label-remember-description"
+                                                style="color: #7f837e">
+                                                <i class="fa-solid fa-circle-info fa-xs"></i> Please provide a
+                                                contact number that can be easily reached for urgent blood
+                                                donation requests.
+                                            </label>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="contactNumber2" class="form-label">Alternate Contact Number
+                                                (Optional)</label>
+                                            <input type="text" class="form-control" id="contactNumber2"
+                                                name="contactNumber2" pattern="[0-9]{10}" />
+                                            <div class="invalid-feedback">
+                                                Please provide a valid 10-digit contact number.
+                                            </div>
+                                            <label class="form-check-label" id="label-remember-description"
+                                                style="color: #7f837e">
+                                                <i class="fa-solid fa-circle-info fa-xs"></i> This number can
+                                                be used as an alternate contact in case the primary number is
+                                                unreachable.
+                                            </label>
+                                        </div>
+
+                                        <!-- Additional Fields -->
+                                        <div class="mb-3">
+                                            <label for="hospital" class="form-label">Hospital Name</label>
+                                            <input type="text" class="form-control" id="hospital" name="hospital"
+                                                required />
+                                            <div class="invalid-feedback">Hospital name is required.</div>
+                                        </div>
+                                        <div id="autocompleteResults" class="autocomplete-results"></div>
+                                        <div class="mb-3">
+                                            <label for="hospitalLocation" class="form-label">Hospital Location</label>
+                                            <label class="form-check-label" id="label-remember-description"
+                                                style="color: #7f837e">
+                                                <i class="fa-solid fa-circle-info fa-xs"></i> Click on <svg width="20"
+                                                    height="20" viewBox="0 0 24 24" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M4 10L20 3L13 19L10 14L4 10Z" />
+                                                </svg> icon present over the map, if you are within the hospital
+                                                premises and select "Allow" if prompted to easily locate your
+                                                current hospital location.
+                                            </label>
+                                            <!--Map-->
+                                            <div class="mb-3">
+                                                <label for="hospitalLocation" class="form-label">Select Hospital
+                                                    Location on Map</label>
+                                                <div id="map"></div>
+                                                <input type="hidden" id="latitude" name="latitude" required />
+                                                <input type="hidden" id="longitude" name="longitude" required />
+                                                <div class="invalid-feedback">Hospital location is required.</div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="urgency" class="form-label">Urgency</label>
+                                            <select class="form-select" id="urgency" name="urgency" required>
+                                                <option value="urgent" selected>Urgent</option>
+                                            </select>
+                                            <div class="invalid-feedback">Urgency is required.</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="bloodUnits" class="form-label">Blood Quantity (Units)</label>
+                                            <input type="number" class="form-control" id="bloodUnits" name="bloodUnits"
+                                                min="1" required />
+                                            <div class="invalid-feedback">
+                                                Please specify the number of blood units required.
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="requestReason" class="form-label">Reason for Request
+                                                (Optional)</label>
+                                            <textarea class="form-control" id="requestReason" name="requestReason"
+                                                rows="3"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="bloodType" class="form-label">Preferred Blood Donation
+                                                Type</label>
+                                            <select class="form-select" id="bloodType" name="bloodType" required>
+                                                <option value="wholeBlood" selected>Whole Blood</option>
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Please select the blood donation type.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Family Members Display -->
+                                    <div id="familyMemberList" class="d-none">
+                                        <center>
+                                            <h6>Select Family Member</h6>
+                                        </center>
+                                        <div id="familyMemberContainer"></div>
+                                    </div>
+
+                                    <!-- Other Users Search -->
+                                    <div id="otherUserSearch" class="d-none">
+                                        <div class="mb-3">
+                                            <label for="searchUser" class="form-label">Search User</label>
+                                            <input type="text" class="form-control" id="searchUser"
+                                                placeholder="Search user" /><br />
+                                            <div id="autocompleteUserResults" class="autocomplete-results"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <button type="submit" class="btn btn-primary w-100 mt-3">
+                                        Submit Blood Request
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <% }else{ %>
+                        <div class="container blur-container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <form class="custom-form needs-validation" id="bloodRequestForm" method="POST"
+                                        action="/bloodRequest" novalidate>
+                                        <h2 class="form-title">Blood Request</h2>
+                                        <div class="mb-3">
+                                            <label for="recipientType" class="form-label">Who is the recipient?</label>
+                                            <select class="form-select" id="recipientType" name="recipientType"
+                                                required>
+                                                <option value="" selected disabled>
+                                                    Select Recipient Type
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100 mt-3">
+                                            Submit Blood Request
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="form-check-label" id="label-remember-description"
+                            style="color: #e45656; text-align: center; font-size: large">
+                            <i class="fa-solid fa-circle-info fa-xs"></i>
+                            Please approve your Medical details before performing blood request.
+                        </p>
+                        <% } %>
+
+                            <script
+                                src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    // Form elements
+                                    const form = document.getElementById("bloodRequestForm");
+                                    const recipientTypeSelect = document.getElementById("recipientType");
+                                    const recipientDetailsDiv = document.getElementById("recipientDetails");
+                                    const familyMemberListDiv = document.getElementById("familyMemberList");
+                                    const familyMemberContainer = document.getElementById("familyMemberContainer");
+                                    const otherUserSearchDiv = document.getElementById("otherUserSearch");
+
+                                    // Hospital search elements
+                                    const hospital = document.getElementById('hospital');
+                                    const autocompleteResults = document.getElementById('autocompleteResults');
+
+                                    // Map elements
+                                    let latitudeInput = document.getElementById("latitude");
+                                    let longitudeInput = document.getElementById("longitude");
+                                    const mapContainer = document.getElementById("map");
+
+                                    // Initialize MapTiler
+                                    maptilersdk.config.apiKey = 'wVy9Sy9TsKoqEYgTM9ha';
+                                    let map;
+                                    let marker;
+
+                                    // Initialize the map
+                                    function initMap() {
+                                        map = new maptilersdk.Map({
+                                            container: 'map',
+                                            style: maptilersdk.MapStyle.STREETS,
+                                            center: [85.3240, 27.7172], // Default center (Kathmandu)
+                                            zoom: 12
+                                        });
+
+                                        // Add controls
+                                        const gc = new maptilersdkMaptilerGeocoder.GeocodingControl({
+                                            types: ['poi'],
+                                            country: "np",
+                                            enableReverse: "always",
+                                            flyTo: true,
+                                            placeholder: "Search for places...",
+                                            fuzzyMatch: true
+                                        });
+                                        map.addControl(gc, 'top-left');
+
+                                        const nav = new maptilersdk.NavigationControl();
+                                        map.addControl(nav, 'top-right');
+
+                                        const geolocate = new maptilersdk.GeolocateControl({
+                                            positionOptions: { enableHighAccuracy: true },
+                                            showAccuracyCircle: true,
+                                            showUserLocation: true
+                                        });
+                                        map.addControl(geolocate, 'top-right');
+
+                                        // Handle geolocation
+                                        geolocate.on('geolocate', (event) => {
+                                            updateMapLocation(event.coords.longitude, event.coords.latitude);
+                                        });
+
+                                        // Handle map clicks
+                                        map.on('click', (event) => {
+                                            updateMapLocation(event.lngLat.lng, event.lngLat.lat);
+                                        });
+
+                                        // Handle search results
+                                        gc.on("pick", (event) => {
+                                            if (event && event.features && event.features.length > 0) {
+                                                const coords = event.features[0].geometry.coordinates;
+                                                console.log(coords)
+                                                updateMapLocation(coords[0], coords[1]);
+                                            }
+                                        });
+                                    }
+
+                                    // Update map location and form fields
+                                    function updateMapLocation(lng, lat) {
+                                        // Update coordinates
+                                        latitudeInput.value = lat;
+                                        longitudeInput.value = lng;
+                                        console.log(lat, lng)
+                                        // Remove any previous marker
+                                        if (marker) {
+                                            marker.remove();
+                                        }
+
+                                        // Add new marker
+                                        marker = new maptilersdk.Marker()
+                                            .setLngLat([lng, lat])
+                                            .addTo(map);
+
+                                        // Fly to the location
+                                        map.flyTo({
+                                            center: [lng, lat],
+                                            zoom: 16
+                                        });
+                                        // Clear any validation errors
+                                        mapContainer.classList.remove("is-invalid");
+                                        const invalidFeedback = mapContainer.parentNode.querySelector(".invalid-feedback");
+                                        if (invalidFeedback) {
+                                            invalidFeedback.style.display = "none";
+                                        }
+                                    }
+
+                                    // Handle recipient type selection
+                                    recipientTypeSelect.addEventListener("change", function () {
+                                        const recipientType = this.value;
+
+                                        // Reset form fields
+                                        document.getElementById("fullName").value = "";
+                                        document.getElementById("hiddenFullName").value = "";
+                                        document.getElementById("address").value = "";
+                                        document.getElementById("bloodGroup").value = "";
+                                        document.getElementById("hiddenBloodGroup").value = "";
+                                        document.getElementById("contactNumber").value = "";
+
+                                        if (recipientType === "myself") {
+                                            fetchUserDetails();
+                                        } else if (recipientType === "familyMember") {
+                                            fetchFamilyMembers();
+                                        } else if (recipientType === "other") {
+                                            showUserSearch();
+                                        }
+                                    });
+
+                                    // Fetch logged-in user's details
+                                    function fetchUserDetails() {
+                                        fetch("/user/populate-details")
+                                            .then((response) => response.json())
+                                            .then((data) => {
+                                                document.getElementById("fullName").value = data.fullName;
+                                                document.getElementById("hiddenFullName").value = data.fullName;
+                                                document.getElementById("address").value = `${data.address.city}, ${data.address.district}, ${data.address.province}`;
+                                                document.getElementById("bloodGroup").value = data.bloodDetails.bloodGroupType;
+                                                document.getElementById("hiddenBloodGroup").value = data.bloodDetails.bloodGroupType;
+                                                document.getElementById("contactNumber").value = data.contactNumber;
+
+                                                recipientDetailsDiv.classList.remove("d-none");
+                                                familyMemberListDiv.classList.add("d-none");
+                                                otherUserSearchDiv.classList.add("d-none");
+                                            });
+                                    }
+
+                                    // Fetch family members
+                                    function fetchFamilyMembers() {
+                                        fetch("/user/familymembers/populate-details")
+                                            .then((response) => response.json())
+                                            .then((data) => {
+                                                familyMemberContainer.innerHTML = "";
+                                                if (data.familyMembers && data.familyMembers.length > 0) {
+                                                    data.familyMembers.forEach((member) => {
+                                                        const memberDiv = createFamilyMemberElement(member);
+                                                        familyMemberContainer.appendChild(memberDiv);
+                                                    });
+                                                    familyMemberListDiv.classList.remove("d-none");
+                                                    recipientDetailsDiv.classList.add("d-none");
+                                                    otherUserSearchDiv.classList.add("d-none");
+                                                } else {
+                                                    familyMemberListDiv.classList.remove("d-none");
+                                                    familyMemberContainer.innerHTML = '<div class="alert alert-info">No approved family members found.</div>';
+                                                }
+                                            });
+                                    }
+
+                                    // Create family member element
+                                    function createFamilyMemberElement(member) {
+                                        const div = document.createElement("div");
+                                        div.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2");
+                                        div.innerHTML = `
+                                            <div class="d-flex align-items-start">
+                                                <img src="${member.userImage}" alt="${member.fullName}" class="user-image me-3" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+                                                <div>
+                                                    <strong>${member.fullName}</strong><br>
+                                                    <span>${member.address.city}, ${member.address.district}</span>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-sm btn-primary select-recipient-btn" 
+                                                data-fullname="${member.fullName}" 
+                                                data-address="${member.address.city}, ${member.address.district}" 
+                                                data-bloodgroup="${member.bloodDetails.bloodGroupType}" 
+                                                data-contact="${member.contactNumber}">Select
+                                            </button>
+                                        `;
+                                        return div;
+                                    }
+
+                                    // Show user search
+                                    function showUserSearch() {
+                                        otherUserSearchDiv.classList.remove("d-none");
+                                        recipientDetailsDiv.classList.add("d-none");
+                                        familyMemberListDiv.classList.add("d-none");
+                                    }
+
+                                    // Handle selection of recipient (family member or other user)
+                                    document.addEventListener("click", function (e) {
+                                        if (e.target.classList.contains("select-recipient-btn")) {
+                                            const fullName = e.target.getAttribute("data-fullname");
+                                            const address = e.target.getAttribute("data-address");
+                                            const bloodGroup = e.target.getAttribute("data-bloodgroup");
+                                            const contactNumber = e.target.getAttribute("data-contact");
+
+                                            document.getElementById("fullName").value = fullName;
+                                            document.getElementById("hiddenFullName").value = fullName;
+                                            document.getElementById("address").value = address;
+                                            document.getElementById("bloodGroup").value = bloodGroup;
+                                            document.getElementById("hiddenBloodGroup").value = bloodGroup;
+                                            document.getElementById("contactNumber").value = contactNumber;
+
+                                            recipientDetailsDiv.classList.remove("d-none");
+                                            if (e.target.classList.contains("select-user-btn")) {
+                                                otherUserSearchDiv.classList.add("d-none");
+                                            } else {
+                                                familyMemberListDiv.classList.add("d-none");
+                                            }
+                                        }
+                                    });
+
+                                    // Search for other users
+                                    document.getElementById("searchUser").addEventListener("input", debounce(async function () {
+                                        const query = this.value.trim();
+                                        const autocompleteResults = document.getElementById("autocompleteUserResults");
+
+                                        if (!query) {
+                                            autocompleteResults.style.display = "none";
+                                            autocompleteResults.innerHTML = "";
+                                            return;
+                                        }
+
+                                        const response = await fetch(`/user/familymembers/search?q=${query}`);
+                                        const users = await response.json();
+                                        autocompleteResults.innerHTML = "";
+
+                                        if (users.length > 0) {
+                                            autocompleteResults.style.display = "block";
+                                            users.forEach((user) => {
+                                                const div = document.createElement("div");
+                                                div.classList.add("autocomplete-item");
+                                                div.innerHTML = `
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <div class="d-flex align-items-start">
+                                                            <img src="${user.userImage}" alt="${user.fullName}" class="user-image me-3" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+                                                            <div>
+                                                                <strong>${user.fullName}</strong><br>
+                                                                <span>${user.address.district}, ${user.address.city}</span>
+                                                            </div>
+                                                        </div>
+                                                        <button class="btn btn-sm btn-primary select-recipient-btn select-user-btn" 
+                                                            data-fullname="${user.fullName}" 
+                                                            data-address="${user.address.city}, ${user.address.district}" 
+                                                            data-bloodgroup="${user.bloodDetails.bloodGroupType}" 
+                                                            data-contact="${user.contactNumber}">Select</button>
+                                                    </div>
+                                                `;
+                                                autocompleteResults.appendChild(div);
+                                            });
+                                        } else {
+                                            autocompleteResults.innerHTML = '<div class="autocomplete-item">No users found</div>';
+                                        }
+                                    }, 300));
+
+                                    // Hospital search
+                                    hospital.addEventListener('input', debounce(async function () {
+                                        const query = this.value.trim();
+                                        if (!query) {
+                                            autocompleteResults.style.display = 'none';
+                                            autocompleteResults.innerHTML = '';
+                                            return;
+                                        }
+
+                                        const response = await fetch(`/user/hospital/search?q=${query}`);
+                                        const hospitals = await response.json();
+                                        autocompleteResults.innerHTML = '';
+
+                                        if (hospitals.length > 0) {
+                                            autocompleteResults.style.display = 'block';
+                                            hospitals.forEach(hospitalData => {
+                                                const div = document.createElement('div');
+                                                div.classList.add('autocomplete-item');
+                                                div.innerHTML = `
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <div class="d-flex align-items-start">
+                                                            <span>${hospitalData.hospital_name}, ${hospitalData.district}, ${hospitalData.province}</span>
+                                                        </div>                                                
+                                                    </div>
+                                                `;
+                                                div.addEventListener('click', function () {
+                                                    hospital.value = `${hospitalData.hospital_name}, ${hospitalData.district}, ${hospitalData.province}`;
+                                                    autocompleteResults.style.display = 'none';
+                                                });
+                                                autocompleteResults.appendChild(div);
+                                            });
+                                        }
+                                    }, 300));
+
+                                    // Form submission handler
+                                    form.addEventListener("submit", function (event) {
+                                        // Validate form
+                                        if (!form.checkValidity()) {
+                                            event.preventDefault();
+                                            event.stopPropagation();
+
+                                            // Check if map location is selected
+                                            if (!latitudeInput.value || !longitudeInput.value) {
+                                                mapContainer.classList.add("is-invalid");
+                                                const invalidFeedback = document.createElement("div");
+                                                invalidFeedback.className = "invalid-feedback";
+                                                invalidFeedback.textContent = "Please select a hospital location on the map";
+                                                mapContainer.parentNode.appendChild(invalidFeedback);
+                                            }
+                                        }
+
+                                        form.classList.add("was-validated");
+                                    });
+
+                                    // Debounce function for search inputs
+                                    function debounce(func, wait) {
+                                        let timeout;
+                                        return function (...args) {
+                                            const context = this;
+                                            clearTimeout(timeout);
+                                            timeout = setTimeout(() => func.apply(context, args), wait);
+                                        };
+                                    }
+
+                                    // Initialize the map when the page loads
+                                    initMap();
+                                });
+                            </script>
+</body>
+
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Request Details | Blood Donor Nepal</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- MapTiler CSS -->
+    <link href="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.0/maptiler-sdk.css" rel="stylesheet">
+    <style>
+        .request-header {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .blood-group-badge {
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .map-container {
+            height: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #dee2e6;
+        }
+
+        .detail-card {
+            border-left: 4px solid #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .responsive-stack {
+                flex-direction: column;
+            }
+
+            .responsive-stack .text-end {
+                text-align: left !important;
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('navbar'); -%>
+
+        <!-- Toast Notification -->
+        <% if (message || error) { %>
+            <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100">
+                <div class="toast show <% if (message) { %>bg-success<% } else { %>bg-danger<% } %>" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <% if (message) { %>
+                                <i class="bi bi-check-circle-fill me-2"></i>
+                                <%= message %>
+                                    <% } else { %>
+                                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                        <%= error %>
+                                            <% } %>
+                        </div>
+                        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+
+                <div class="container py-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-10">
+                            <!-- Main Card -->
+                            <div class="card shadow-sm mb-4">
+                                <!-- Card Header -->
+                                <div class="card-header request-header py-3">
+                                    <div class="d-flex justify-content-between align-items-center responsive-stack">
+                                        <h2 class="h4 mb-0">
+                                            <i class="bi bi-droplet-fill me-2"></i>Blood Request Details
+                                        </h2>
+                                        <div>
+                                            <span
+                                                class="badge bg-<%= bloodRequest.status === 'fulfilled' ? 'success' : 'light' %> text-<%= bloodRequest.status === 'fulfilled' ? 'white' : 'dark' %>">
+                                                <%= bloodRequest.status.charAt(0).toUpperCase() +
+                                                    bloodRequest.status.slice(1) %>
+                                            </span>
+                                            <span
+                                                class="badge bg-<%= bloodRequest.urgency === 'urgent' ? 'danger' : 'warning' %> ms-2">
+                                                <%= bloodRequest.urgency.charAt(0).toUpperCase() +
+                                                    bloodRequest.urgency.slice(1) %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <!-- Blood Group Highlight -->
+                                    <div class="text-center mb-4">
+                                        <span class="badge blood-group-badge bg-danger">
+                                            <i class="bi bi-droplet-fill me-2"></i>
+                                            <%= bloodRequest.bloodGroupType %>
+                                                (<%= bloodRequest.bloodType==='wholeBlood' ? 'Whole Blood' :
+                                                    bloodRequest.bloodType.charAt(0).toUpperCase() +
+                                                    bloodRequest.bloodType.slice(1) %>)
+                                        </span>
+                                        <h4 class="mt-3">
+                                            <%= bloodRequest.bloodUnits %> Unit(s) Needed
+                                        </h4>
+                                    </div>
+
+                                    <!-- Details Row -->
+                                    <div class="row g-4">
+                                        <!-- Left Column -->
+                                        <div class="col-md-6">
+                                            <div class="card h-100 detail-card">
+                                                <div class="card-body">
+                                                    <h5 class="card-title"><i
+                                                            class="bi bi-info-circle-fill text-danger me-2"></i>Request
+                                                        Details</h5>
+                                                    <hr>
+                                                    <div class="mb-3">
+                                                        <h6 class="fw-bold">Recipient Information</h6>
+                                                        <p>
+                                                            <i class="bi bi-person-fill me-2"></i>
+                                                            <%= bloodRequest.recipientType==='myself' ?
+                                                                bloodRequest.fullName : 'For someone else (' +
+                                                                bloodRequest.fullName + ')' %>
+                                                        </p>
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <h6 class="fw-bold">Hospital Details</h6>
+                                                        <p>
+                                                            <i class="bi bi-hospital me-2"></i>
+                                                            <%= bloodRequest.hospital.split('_')[0] %>
+                                                        </p>
+                                                        <p>
+                                                            <i class="bi bi-geo-alt-fill me-2"></i>
+                                                            <%= bloodRequest.address %>
+                                                        </p>
+                                                    </div>
+
+                                                    <% if (bloodRequest.requestReason) { %>
+                                                        <div class="mb-3">
+                                                            <h6 class="fw-bold">Reason for Request</h6>
+                                                            <p>
+                                                                <%= bloodRequest.requestReason %>
+                                                            </p>
+                                                        </div>
+                                                        <% } %>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Right Column -->
+                                        <div class="col-md-6">
+                                            <div class="card h-100 detail-card">
+                                                <div class="card-body">
+                                                    <h5 class="card-title"><i
+                                                            class="bi bi-telephone-fill text-danger me-2"></i>Contact
+                                                        Information</h5>
+                                                    <hr>
+                                                    <div class="mb-3">
+                                                        <h6 class="fw-bold">Primary Contact</h6>
+                                                        <p>
+                                                            <i class="bi bi-phone-fill me-2"></i>
+                                                            <%= bloodRequest.contactNumber %>
+                                                        </p>
+                                                        <% if (bloodRequest.contactNumber2) { %>
+                                                            <h6 class="fw-bold">Secondary Contact</h6>
+                                                            <p>
+                                                                <i class="bi bi-phone me-2"></i>
+                                                                <%= bloodRequest.contactNumber2 %>
+                                                            </p>
+                                                            <% } %>
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <h6 class="fw-bold">Request Date</h6>
+                                                        <p>
+                                                            <i class="bi bi-calendar-date me-2"></i>
+                                                            <%= new Date(bloodRequest.createdAt).toLocaleDateString() %>
+                                                                at <%= new
+                                                                    Date(bloodRequest.createdAt).toLocaleTimeString() %>
+                                                        </p>
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <h6 class="fw-bold">Requested By</h6>
+                                                        <div class="d-flex align-items-center mt-2">
+                                                            <% if (bloodRequest.createdBy.userImage) { %>
+                                                                <img src="<%= bloodRequest.createdBy.userImage %>"
+                                                                    class="rounded-circle me-3" width="50" height="50"
+                                                                    alt="Requester">
+                                                                <% } else { %>
+                                                                    <div class="rounded-circle bg-secondary me-3 d-flex align-items-center justify-content-center"
+                                                                        style="width: 50px; height: 50px;">
+                                                                        <i
+                                                                            class="bi bi-person-fill text-white fs-5"></i>
+                                                                    </div>
+                                                                    <% } %>
+                                                                        <div>
+                                                                            <p class="mb-0 fw-bold">
+                                                                                <%= bloodRequest.createdBy.fullName %>
+                                                                            </p>
+                                                                            <p class="mb-0 text-muted">
+                                                                                <i class="bi bi-telephone me-1"></i>
+                                                                                <%= bloodRequest.createdBy.contactNumber
+                                                                                    %>
+                                                                            </p>
+                                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Map Section -->
+                                    <div class="mt-4">
+                                        <h5 class="mb-3"><i class="bi bi-map-fill text-danger me-2"></i>Hospital
+                                            Location</h5>
+                                        <div class="map-container" id="map"></div>
+                                    </div>
+
+                                    <!-- Action Buttons -->
+                                    <div class="d-flex justify-content-between mt-4">
+                                        <% if (user && user._id.toString()===bloodRequest.createdBy._id.toString()) { %>
+                                            <div>
+                                                <a href="/bloodRequest/edit/<%= bloodRequest._id %>"
+                                                    class="btn btn-outline-primary me-2">
+                                                    <i class="bi bi-pencil-fill me-1"></i> Edit Request
+                                                </a>
+                                                <% if (bloodRequest.status !=='fulfilled' ) { %>
+                                                    <form action="/bloodRequest/fulfill/<%= bloodRequest._id %>"
+                                                        method="POST" class="d-inline">
+                                                        <button type="submit" class="btn btn-success">
+                                                            <i class="bi bi-check-circle-fill me-1"></i> Mark as
+                                                            Fulfilled
+                                                        </button>
+                                                    </form>
+                                                    <% } %>
+                                            </div>
+                                            <% } else { %>
+                                                <button class="btn btn-danger" data-bs-toggle="modal"
+                                                    data-bs-target="#donateModal">
+                                                    <i class="bi bi-heart-fill me-1"></i> I Can Donate
+                                                </button>
+                                                <% } %>
+                                                    <a href="/home" class="btn btn-outline-secondary">
+                                                        <i class="bi bi-arrow-left me-1"></i> Back to Home
+                                                    </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Donate Modal -->
+                <div class="modal fade" id="donateModal" tabindex="-1" aria-labelledby="donateModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger text-white">
+                                <h5 class="modal-title" id="donateModalLabel">
+                                    <i class="bi bi-heart-fill me-2"></i>Confirm Donation
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>You're about to respond to this blood request. The requester will be notified and can
+                                    contact you.</p>
+
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle-fill me-2"></i>
+                                    Please ensure your contact information is up to date in your profile.
+                                </div>
+                                <input type="hidden" id="hospitalLocation"
+                                    data-lat="<%= bloodRequest.hospitalLocation.latitude %>"
+                                    data-lng="<%= bloodRequest.hospitalLocation.longitude %>">
+
+                                <h6 class="fw-bold mt-4">Request Summary:</h6>
+                                <ul class="list-group list-group-flush mb-3">
+                                    <li class="list-group-item">
+                                        <i class="bi bi-droplet-fill text-danger me-2"></i>
+                                        Blood Group: <%= bloodRequest.bloodGroupType %>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-hospital text-danger me-2"></i>
+                                        Hospital: <%= bloodRequest.hospital.split('_')[0] %>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-geo-alt-fill text-danger me-2"></i>
+                                        Location: <%= bloodRequest.address %>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    <i class="bi bi-x-circle me-1"></i> Cancel
+                                </button>
+                                <form action="/bloodRequest/respond/<%= bloodRequest._id %>" method="POST">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="bi bi-check-circle me-1"></i> Confirm Donation
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scripts -->
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                <script src="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.0/maptiler-sdk.umd.js"></script>
+                <script>
+                    // Initialize MapTiler map
+                    maptilersdk.config.apiKey = 'wVy9Sy9TsKoqEYgTM9ha';
+
+                    const hospitalLocation = {
+                        lat: parseFloat(document.getElementById('hospitalLocation').dataset.lat),
+                        lng: parseFloat(document.getElementById('hospitalLocation').dataset.lng)
+                    };
+
+                    const map = new maptilersdk.Map({
+                        container: 'map',
+                        style: maptilersdk.MapStyle.STREETS,
+                        center: [hospitalLocation.lng, hospitalLocation.lat],
+                        zoom: 15
+                    });
+
+                    // Add marker for hospital location
+                    new maptilersdk.Marker({ color: "#dc3545" })
+                        .setLngLat([hospitalLocation.lng, hospitalLocation.lat])
+                        .addTo(map);
+
+                    // Add zoom control
+                    map.addControl(new maptilersdk.NavigationControl(), 'top-right');
+
+                    // Auto-close toast after 5 seconds
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const toastEl = document.querySelector('.toast');
+                        if (toastEl) {
+                            setTimeout(() => {
+                                const toast = bootstrap.Toast.getInstance(toastEl);
+                                if (toast) toast.hide();
+                            }, 5000);
+                        }
+                    });
+                </script>
+</body>
+
+</html>

@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #fefefe;
+    font-family: 'Poppins', sans-serif;
+}
+
+.custom-header {
+    text-align: center;
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.custom-header img {
+    max-width: 150px;
+    margin-bottom: 10px;
+}
+
+.custom-header h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.custom-form {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#login-form {
+    align-items: center;
+    max-width: 400px;
+}
+
+.form-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+#label-remember-description {
+    color: rgba(0, 0, 0, 0.475);
+}
+
+.me-2 {
+    width: 50px;
+}
+
+.container {
+    margin-bottom: 30px;
+}
+#toast-message {
+    position: fixed;
+    top: 2.5rem;
+    right: 2.5rem; /* Position in the top-right corner */
+    max-width: 250px;
+    color: white;
+    font-size: larger;
+    z-index: 1000;
+}
+
+@media (max-width: 576px) {
+    #toast-message {
+        top: 2.5rem;
+        right: 1rem; /* Adjust for smaller screens */
+        width: 200px;
+        max-width: calc(100vw - 2rem); /* Full width minus padding */
+    }
+}

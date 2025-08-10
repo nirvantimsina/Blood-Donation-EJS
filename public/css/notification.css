@@ -1,0 +1,68 @@
+.btn-primary.btn-sm.show-more-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 0.875rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 1; 
+    position: relative; 
+}
+
+.btn-primary.btn-sm.show-more-btn:hover {
+    background-color: #0056b3;
+}
+
+.badge {
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    border-radius: 20px;
+    z-index: 1; 
+    position: relative; 
+}
+
+.list-group-item {
+    position: relative; /* Ensures stacking context is created within the item */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border: none;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+.card-header {
+    background-color: #007bff; 
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding: 15px;
+    border-bottom: none;
+    
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+    
+}
+.text-truncate{
+    padding-right: 10px;
+}
+#notifiaction-title-close-btn{
+    display: flex;
+    display: grid;
+    flex-direction: column;
+}
+#katta{
+z-index: 10;
+padding-right: 500px;
+}
