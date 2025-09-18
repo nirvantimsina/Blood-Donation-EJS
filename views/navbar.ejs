@@ -19,7 +19,7 @@
     <nav class="navbar navbar-expand-lg sticky-top navbar-light">
       <div class="container">
         <a class="navbar-brand" href="/home">
-          <img src="../images/blood-donor.png" alt="logo" width="28" height="28"> Blood Donor Nepal
+          <img src="/images/blood-donor.png" alt="logo" width="28" height="28"> Blood Donor Nepal
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
           aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,9 +44,14 @@
             </li>
             <li class="nav-item dropdown" style="font-weight: bold;">
               <div class="btn-group">
-                <button class="btn btn-transparent dropdown-toggle" type="button" data-toggle="dropdown"
-                  aria-expanded="false" style="font-weight: bold;font-size: 14px;">
-                  <img src="<%= user.userImage  %>" alt="Profile Image" class="profile-img-navbar" id="profileImage">
+                <button class="btn btn-transparent dropdown-toggle" 
+        type="button" 
+        data-toggle="dropdown"
+        aria-expanded="false" 
+        style="font-weight: bold; font-size: 14px; border:5px solid transparent; transition:border 0.3s;"
+        onmouseover="this.style.border='1px solid red'"
+        onmouseout="this.style.border='1px solid transparent'">
+                  <img src="/images/blood-donor.png" alt="Profile Image" class="profile-img-navbar" id="profileImage">
                   <%= user.fullName %>
                 </button>
                 <div class="dropdown-menu">
