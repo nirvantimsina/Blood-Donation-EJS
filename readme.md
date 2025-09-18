@@ -48,8 +48,8 @@ Before running the application, ensure you have the following installed:
 3. Set up environment variables:
    - Create a `.env` file in the root directory with the following content:
      ```text
-     MONGODB_URI=your_Mongodb_URI
-     SESSION_SECRET=your_session_secret_here
+     MONGODB_URI=your_Mongodb_URI (dont forget to also specify the database to be used at the end)
+     SESSION_SECRET=your_session_secret_here (you can have any value for this key)
      PORT=3000
      ```
    - Replace `MONGODB_URI` with your actual MongoDB URI and set a strong `SESSION_SECRET`.
@@ -71,13 +71,18 @@ Before running the application, ensure you have the following installed:
 
 ```
 Blood-Donation-EJS/
-├── config/             # Configuration files
-├── controllers/        # Route controllers
-├── models/             # MongoDB models
-├── public/             # Static assets (CSS, JS, images)
-├── routes/             # Express routes
-├── views/              # EJS templates
-├── app.js              # Main application file
+├── public/                # Static assets (CSS, JS, images)
+├── src
+   ├── controllers/        # Route controllers
+   ├── db                  # Connects to database
+   ├── json                # Has rules for donating blood
+   ├── middlewares         # Middlewares for apis
+   ├── models/             # MongoDB models
+   ├── routes/             # Express routes
+   ├── services/           # services
+   ├── app.js              # Main application file
+   ├── index.js              # Index file that starts the server
+├── views/              # EJS files (frontend)
 ├── package.json        # Project dependencies
 └── .env                # Environment variables
 ```

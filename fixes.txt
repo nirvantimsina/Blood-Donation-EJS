@@ -1,0 +1,21 @@
+1. fixed the missing "start" script in package.json
+
+2. fixed the typo in database.js which had the environment variable "MONGODBURI" but in .env its "MONGODB_URI"
+
+3. truns out there are quite a few environment variables that aren't mentioned in the docs
+
+4. fixed the index.js for showing the frontend domain
+
+5. fixed the "USERSECRET" not being detected in index.js because .env has "SESSION_SECRET" so changed the .env to USERSECRET
+
+6. took out the views file from public and kept it in root directory because public dir is for static files only and edited the paths accordingly
+
+7. fixed the index.js file looking from relative path which caused problem and made it look from absolute path
+
+8. fixed the directroy issue that didnt load the css files
+
+9. added website logo beside the title bar
+
+10. updated the readme.md
+
+11. still the personal details and medical details dont work which needs to be fixed.

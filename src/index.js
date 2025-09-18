@@ -37,10 +37,10 @@ const userSession = session({
 app.use(userSession);
 
 // Serve static files
-app.use(express.static(path.resolve("../public")));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Set view engine and views directory
-app.set('views', path.join(__dirname, '../public/views'));
+app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
 
 // Routes
@@ -286,6 +286,6 @@ app.get('/admin/blood-requests/:id', verifyAdminSession, async (req, res) => {
 connectDB().then(() => {
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on port ${PORT}`);
-    console.log('Click here to access:', process.env.DOMAIN);
+    console.log(`Click here to access: http://localhost:${PORT}`);
   });
 });
