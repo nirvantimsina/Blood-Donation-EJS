@@ -25,7 +25,7 @@ const registerUser = async (req, res) => {
         }
 
         const fullName = firstName + ' ' + middleName + ' ' + lastName;
-        const userImage = "https://imgs.search.brave.com/UdortXHLdfpYIIqvy9aEoQbDm7PUOckVxkrg6ltA4ts/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMtMDAuaWNvbmR1/Y2suY29tL2Fzc2V0/cy4wMC91c2VyLWlj/b24tMjI3eDI1Ni1j/eXJiOXBpNS5wbmc";
+        const userImage = "https://i.pinimg.com/736x/71/11/82/711182648b79d448117c2a990c9c9ec9.jpg";
 
         const newUser = await User.create({
             fullName,
