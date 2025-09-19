@@ -51,21 +51,35 @@ Before running the application, ensure you have the following installed:
      MONGODB_URI=your_Mongodb_URI (dont forget to also specify the database to be used at the end)
      SESSION_SECRET=your_session_secret_here (you can have any value for this key)
      PORT=3000
+     CLOUDNAME=your_cloudinary_name
+     API_KEY=your_cloudinary_key
+     API_SECRET=your_cloudinary_secret
+     GEMINI_API_KEY=your_gemini_api_key
+     APP_EMAIL=your_email
+     APP_PASSWORD=your_email_password
+     APP_PORT=465
+     DOMAIN=http://localhost:4001/
+     HUGGINGFACEAPI=Bearer your_token
      ```
-   - Replace `MONGODB_URI` with your actual MongoDB URI and set a strong `SESSION_SECRET`.
+   - Replace all env variables values with your actual values.
 
 ## Running the Application
 
-1. Start the server:
+1. Go to the src folder:
+   ```bash
+    cd src
+   ```
+2. Start the server:
 
    ```bash
    npm start
    ```
 
-2. The application should now be running at:
+3. The application should now be running at:
    ```text
    http://localhost:3000
    ```
+
 
 ## Project Structure
 
@@ -86,6 +100,7 @@ Blood-Donation-EJS/
 ├── package.json        # Project dependencies
 └── .env                # Environment variables
 ```
+
 
 ## Available Routes
 
